@@ -3,7 +3,7 @@ import './NewsLayout.css';
 import { Grid, ScrollArea, Progress, Container, Spoiler } from '@mantine/core'
 import animationData from './loading_animation.json';
 import Lottie from 'react-lottie'
-export default function NewsLayout({ data, loading, setPage, setId, page }) {
+export default function NewsLayout({ data, loading, setPage, setId, page, id }) {
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -26,7 +26,12 @@ export default function NewsLayout({ data, loading, setPage, setId, page }) {
                         <span className="dot" style={{ background: '#5AC05A' }}></span>
                     </div>
                     <div className="column middle">
-                        <input type="text" readOnly defaultValue="https://www.hackernews.com" />
+                        {page === 'search' ? (
+                            <input type="text" readOnly defaultValue="https://www.hackernews.com" />
+                        ) : (
+                            <input type="text" readOnly defaultValue={`https://www.hackernews.com/article/${id}`} />
+                        )}
+
                     </div>
                     <div className="column right">
                         <div style={{ float: "right" }}>
@@ -79,22 +84,47 @@ export default function NewsLayout({ data, loading, setPage, setId, page }) {
                                             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Points: {data?.points}</h5>
                                             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Comments</h5>
                                             <hr />
-                                            {data?.children.map((ele,id)=>{
-                                                if(ele.author === null || ele.text === null){
+                                            {data?.children.map((ele, id) => {
+                                                if (ele.author === null || ele.text === null) {
                                                     return (<></>)
                                                 }
                                                 let parser = new DOMParser();
-                                                let html = parser.parseFromString(ele.text,'text/html');
-                                                return(
-                                                    <div className="p-1 my-2 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-s3 dark:border-s4 flex flex-col items-center justify-center max-h-sm">
+                                                let html = parser.parseFromString(ele.text, 'text/html');
+                                                return (
+                                                    <div className="p-1 my-2 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-s3 dark:border-s4 flex flex-col items-center justify-center max-h-xl">
                                                         <a href="#">
                                                             <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">By: {ele.author}</h5>
                                                         </a>
-                                                        <div className="mb-3 relative left-0 text-left font-normal text-gray-700 dark:text-slate-200">
-                                                            <Spoiler maxHeight={50} showLabel="Show more" hideLabel="Hide">
-                                                                {html.body.innerHTML}
-                                                            </Spoiler>
-                                                        </div>
+                                                        <Spoiler maxHeight={70} showLabel="Show more" hideLabel="Hide">
+                                                            <div className="mb-3 relative left-0 px-3 text-left font-normal text-gray-700 dark:text-slate-200"
+                                                                dangerouslySetInnerHTML={{ __html: html.body.innerHTML }}
+                                                            >
+                                                            </div>
+                                                            {ele?.children?.length > 0 ? (<>
+                                                                <a href="#">
+                                                                    <h5 className="mb-2 text-lg font-bold px-3 tracking-tight text-gray-900 dark:text-white">Comments</h5>
+                                                                </a>
+                                                                <ScrollArea style={{ height: "150px" }}>
+                                                                    {ele?.children.map((item, i) => {
+                                                                        let parser = new DOMParser();
+                                                                        let html = parser.parseFromString(item.text, 'text/html');
+                                                                        return (<div className="p-1 my-2 w-4/5 ml-[100px] bg-white rounded-lg border border-gray-200 shadow-md dark:bg-s2 dark:border-s4 flex flex-col items-center justify-center max-h-sm">
+                                                                            <a href="#">
+                                                                                <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">By: {item.author}</h5>
+                                                                            </a>
+                                                                            <Spoiler maxHeight={100} showLabel="Show more" hideLabel="Hide">
+                                                                                <div className="mb-3 relative left-0 text-left font-normal text-gray-700 dark:text-slate-200"
+                                                                                    dangerouslySetInnerHTML={{ __html: html.body.innerHTML }}
+                                                                                >
+                                                                                </div>
+                                                                            </Spoiler>
+
+                                                                        </div>)
+                                                                    })}
+                                                                </ScrollArea>
+                                                            </>) : (<></>)}
+                                                        </Spoiler>
+
                                                     </div>
                                                 )
                                             })}
