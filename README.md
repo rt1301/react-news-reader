@@ -1,6 +1,15 @@
-# Getting Started with Create React App
+# React News Reader
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple News reader application in which users can search for any particular keywords and news articles corresponding to those will be displayed.
+<br>
+The Application uses React.js, TailwindCSS, Mantine.js for the designing and [HN Search API](https://hn.algolia.com/api)
+
+## Screenshots
+![Screenshot (383)](https://user-images.githubusercontent.com/63252510/179240023-5b2c1a21-6639-4c8c-8eba-c31e3c3a6c51.png)
+<br><br>
+![Screenshot (384)](https://user-images.githubusercontent.com/63252510/179240075-ad6bcd70-85e3-43cf-954a-db46eba9c4ee.png)
+<br><br>
+![Screenshot (386)](https://user-images.githubusercontent.com/63252510/179240114-a1c089f5-37a1-4bfe-a232-b42c6f144857.png)
 
 ## Available Scripts
 
